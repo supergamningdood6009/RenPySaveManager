@@ -1,9 +1,10 @@
 import os
 import tkinter as tk
 from tkinter import ttk
+from tkinter import simpledialog as tsd
 from functools import partial
 selfpath = os.path.abspath(__file__)[:-7]
-print(selfpath)
+
 if("info.yummy" not in os.listdir(selfpath)):
     jank = open("info.yummy","w")
     knaj = open(selfpath+"info.yum")
@@ -12,13 +13,17 @@ if("info.yummy" not in os.listdir(selfpath)):
     knaj.close()
     os.remove(selfpath+"info.yum")
 
-selfpath = os.path.abspath(__file__)[:-7]
-storage = open(selfpath+"info.yum")
+storage = open(selfpath+"info.yummy")
 halfway = storage.read().split(",\n")
 data = dict(item.split(": ") for item in halfway)
 storage.close()
+
+if(data['pathdata']=="I don't know, that's scary"):
+    pappdatath = tsd.askstring("Wheres appdata", 
+    "paste the path to your appdata copy of the saves for this game\nIt prolly looks like C:\\Users\\YOUR USER HERE\\AppData\\Roaming\\RenPy\\NAME OF RENPY GAME PLUS A BUNCH OF NUMBERS HERE")
+    data['pathdata'] = pappdatath
+
 data["profiles"]=data['profiles'][1:-1].replace("'",'').split(", ")
-print(data["profiles"])
 
 def changeactive(activechanged):    
     print(activechanged.get())
@@ -108,6 +113,6 @@ proflies.place(x=137,y=30)
 
 
 root.mainloop()
-storage = open(selfpath+"info.yum","w")
-storage.write(f'pappdatath: {data['pappdatath']},\nprofiles: {data['profiles']}')
+storage = open(selfpath+"info.yummy","w")
+storage.write(f'pathdata: {data['pathdata']},\nprofiles: {data['profiles']}')
 storage.close()
