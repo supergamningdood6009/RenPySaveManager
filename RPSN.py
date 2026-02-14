@@ -4,7 +4,9 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import simpledialog as tsd
 from functools import partial
-
+from time import sleep
+from PIL import Image
+import random
 selfpath = os.path.abspath("./")+"\\"
 
 if("info.yummy" not in os.listdir(selfpath)):
@@ -44,9 +46,46 @@ def changeactive(activechanged):
     changeto=activechanged.get()
     if(data['active']==changeto):
         return()
+    throbber = tk.Toplevel()
+    throbber.configure(bg="#000000",width=250,height=80)
+    thext = tk.StringVar()
+    thext.set("Moving files...\nDon't have a gif because python is mean :(")
+    lapel = tk.Label(throbber,
+            textvariable=thext,
+            bg="#00ff99")
+    lapel.place(x=10,y=25)
+
+    # throbbers = os.listdir("./throbbers")
+    # random.shuffle(throbbers)
+    # infoe = Image.open("./throbbers/"+throbbers[0])
+    # frames = infoe.n_frames
+    # photoimage_objects=[]
+    # for i in range(frames):
+    #     obj = tk.PhotoImage(file ="./throbbers/"+throbbers[0],format=f"gif -index {i}")
+    #     photoimage_objects.append(obj   )
     
+    # gif_label =tk.Label(throbber,image="")
+    # gif_label.place(x=100,y=100)
+    # def animation(current_frame=0):
+    #     global loop
+    #     image = photoimage_objects[current_frame]
+
+    #     gif_label.configure(image = image)
+    #     current_frame = current_frame + 1
+
+    #     if current_frame == frames:
+    #         current_frame = 0 # reset the current_frame to 0 when end is reached
+
+    #     loop = root.after(50, lambda: animation(current_frame))
+    # animation()
+
+
+
+    throbber.update()
     putFilesAway()
+    sleep(2)
     takeFilesOut(changeto)
+    throbber.destroy()
 
     data['active'] = changeto
 
