@@ -1,10 +1,11 @@
 import os
+import shutil
 import tkinter as tk
 from tkinter import ttk
 from tkinter import simpledialog as tsd
 from functools import partial
-
 selfpath = os.path.abspath(__file__)[:-7]
+elfpath = selfpath[:-17]+"saves\\"
 
 if("info.yummy" not in os.listdir(selfpath)):
     jank = open("info.yummy","w")
@@ -19,29 +20,55 @@ halfway = storage.read().split(",\n")
 data = dict(item.split(": ") for item in halfway)
 storage.close()
 
-if(data['pathdata']=="I don't know, that's scary"):
-    pappdatath = tsd.askstring("Wheres appdata", 
-    "paste the path to your appdata copy of the saves for this game\nIt prolly looks like C:\\Users\\YOUR USER HERE\\AppData\\Roaming\\RenPy\\NAME OF RENPY GAME PLUS A BUNCH OF NUMBERS HERE")
-    data['pathdata'] = pappdatath
+erstring = "paste the path to your appdata copy of the saves for this game\nIt prolly looks like C:\\Users\\YOUR USER HERE\\AppData\\Roaming\\RenPy\\NAME OF RENPY GAME PLUS A BUNCH OF NUMBERS HERE"
+while(data['pathdata']=="I don't know, that's scary"):
+    pappdatath = tsd.askstring("Wheres appdata", erstring)
+    if(os.path.exists(pappdatath)):
+        data['pathdata'] = pappdatath
+    else:
+        erstring = "python says that directory doesn't exist\nIt prolly looks like C:\\Users\\YOUR USER HERE\\AppData\\Roaming\\RenPy\\NAME OF RENPY GAME PLUS A BUNCH OF NUMBERS HERE"
+del erstring
+
+orcpath = [selfpath[:-17]+"saves\\",data['pathdata']]
+
 
 data["profiles"]=data['profiles'][1:-1].replace("'",'').split(", ")
-print(data)
+
 def changeactive(activechanged):   
     changeto=activechanged.get()
     if(data['active']==changeto):
         return()
-    else:
-        data['active'] = changeto
-    print(activechanged.get())
+    
+    putFilesAway()
+    takeFilesOut(changeto)
+
+    data['active'] = changeto
+
+    data['profiles'].index(data['active'])
+    #proflies.current(data['profiles'].index(data['active']))
+
+def putFilesAway():
+    flies = os.listdir(elfpath)
+    for fly in flies:
+        if not fly in data['profiles']:
+            os.rename(elfpath+fly,elfpath+data["active"]+"\\"+fly)
+
+def takeFilesOut(folder):
+    flies = os.listdir(elfpath+folder)
+    for fly in flies:
+            os.rename(elfpath+folder+"\\"+fly,elfpath+fly)    
 
 def makeprof(name,persistent,top):
     try:
-        os.makedirs(selfpath[:-17]+"saves\\"+name.get())
+        os.makedirs(elfpath+name.get())
     except Exception as e:
         print(e)
         tk.messagebox.showerror("something went wrong","Probalbly the name for your profile already exits or is an invalid file name")
         return()
+    if(not persistent.get()):
+        shutil.copy2(elfpath+"persistent",elfpath+name.get()+"\\persistent")
     data['profiles'].append(name.get())
+    
     top.destroy()
 
 def addprof():
@@ -124,9 +151,14 @@ proflies.place(x=137,y=30)
 
 # input("?")
 # a ="a: 1, b: 2"
+orcpath = [selfpath[:-17]+"saves\\",data['pathdata']]
 
 
 root.mainloop()
 storage = open(selfpath+"info.yummy","w")
 storage.write(f'pathdata: {data['pathdata']},\nprofiles: {data['profiles']},\nactive: {data['active']}')
 storage.close()
+
+
+
+
