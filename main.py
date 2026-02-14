@@ -25,8 +25,13 @@ if(data['pathdata']=="I don't know, that's scary"):
     data['pathdata'] = pappdatath
 
 data["profiles"]=data['profiles'][1:-1].replace("'",'').split(", ")
-
-def changeactive(activechanged):    
+print(data)
+def changeactive(activechanged):   
+    changeto=activechanged.get()
+    if(data['active']==changeto):
+        return()
+    else:
+        data['active'] = changeto
     print(activechanged.get())
 
 def makeprof(name,persistent,top):
@@ -106,6 +111,8 @@ proflies = ttk.Combobox(root,values=data['profiles'],
             postcommand=lambda: proflies.configure(values=data['profiles']),
             state="readonly")
 
+proflies.current(data['profiles'].index(data['active']))
+
 change = tk.Button(root,
                    text="change active profile",
                    command= partial(changeactive,activeprof),
@@ -121,5 +128,5 @@ proflies.place(x=137,y=30)
 
 root.mainloop()
 storage = open(selfpath+"info.yummy","w")
-storage.write(f'pathdata: {data['pathdata']},\nprofiles: {data['profiles']}')
+storage.write(f'pathdata: {data['pathdata']},\nprofiles: {data['profiles']},\nactive: {data['active']}')
 storage.close()
