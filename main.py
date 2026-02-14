@@ -2,6 +2,15 @@ import os
 import tkinter as tk
 from tkinter import ttk
 from functools import partial
+selfpath = os.path.abspath(__file__)[:-7]
+print(selfpath)
+if("info.yummy" not in os.listdir(selfpath)):
+    jank = open("info.yummy","w")
+    knaj = open(selfpath+"info.yum")
+    jank.write(knaj.read())
+    jank.close()
+    knaj.close()
+    os.remove(selfpath+"info.yum")
 
 selfpath = os.path.abspath(__file__)[:-7]
 storage = open(selfpath+"info.yum")
