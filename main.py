@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import simpledialog as tsd
 from functools import partial
+
 selfpath = os.path.abspath(__file__)[:-7]
 
 if("info.yummy" not in os.listdir(selfpath)):
@@ -29,6 +30,12 @@ def changeactive(activechanged):
     print(activechanged.get())
 
 def makeprof(name,persistent,top):
+    try:
+        os.makedirs(selfpath[:-17]+"saves\\"+name.get())
+    except Exception as e:
+        print(e)
+        tk.messagebox.showerror("something went wrong","Probalbly the name for your profile already exits or is an invalid file name")
+        return()
     data['profiles'].append(name.get())
     top.destroy()
 
