@@ -1,0 +1,6 @@
+A way to create "profiles" for a renpy game that have entirely different sets of saves (and optionally, different persistent data)
+(when its finished) you can just add the 'RenPySaveManager' folder to the "game" folder of your chosen renpy game, follow the instructions, and it should work!
+
+notes:
+A) it *should* be impossible for this to damage anything (all it does is move files between folders), but I'm bad at coding so I still recommend making a backup of your saves
+2) From my current testing, changing profiles while the the game is running works fairly smoothly (though not wihout some jank) but that feels like playing with fire, so be careful with that
