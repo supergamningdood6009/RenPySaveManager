@@ -1,6 +1,13 @@
 A way to create "profiles" for a renpy game that have entirely different sets of saves (and optionally, different persistent data)
-(when its finished) you can just add the 'RenPySaveManager' folder to the "game" folder of your chosen renpy game, follow the instructions, and it should work!
+
+Installation:
+1) Be using windows probably
+2) download RenPySaveManger.zip from the latest release
+3) find the folder that contains your favorite visual novel (or immersive roleplay & click novel, depending)
+4) extract renpysavemanager.zip into the game folder of that visual novel (the .exe should be in NAME OF GAME HERE/game/RenPySaveManager, if its not in that path specifically there will probably be bugs)
+5) Run RPSN.exe
+6) (optional) tell me if something goes wrong because this project is a hyperbodge
 
 notes:
 A) it *should* be impossible for this to damage anything (all it does is move files between folders), but I'm bad at coding so I still recommend making a backup of your saves
-2) From my current testing, changing profiles while the the game is running works fairly smoothly (though not wihout some jank) but that feels like playing with fire, so be careful with that
+2) From my current testing, changing profiles while the the game is running works fairly smoothly (though not wihout some jank) but that feels like playing with fire, so be careful with that.
