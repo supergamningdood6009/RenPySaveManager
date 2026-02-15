@@ -11,3 +11,4 @@ Installation:
 notes:
 A) it *should* be impossible for this to damage anything (all it does is move files between folders), but I'm bad at coding so I still recommend making a backup of your saves
 2) From my current testing, changing profiles while the the game is running works fairly smoothly (though not wihout some jank) but that feels like playing with fire, so be careful with that.
+γ) probably don't make a new persistent for your profiles. Persistent saves things like preferences and extra menu unlocks, which you generally don't have a reason to change.
