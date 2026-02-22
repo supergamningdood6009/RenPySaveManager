@@ -109,7 +109,7 @@ def takeFilesOut(folder):
         for fly in flies:
             if(fly=="persistent"):
                 os.rename(elfpath+"persistent",elfpath+"persistent.Σ")
-                os.rename(elfpath+folder+"\\"+fly,elfpath+fly)    
+            os.rename(elfpath+folder+"\\"+fly,elfpath+fly)    
 
 def makeprof(name,persistent,top):
     for elfpath in orcpath:
