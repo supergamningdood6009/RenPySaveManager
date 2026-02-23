@@ -43,20 +43,18 @@ def TstChange(name):
                     assert flight[-5:]==".save"
                     assert flight in fleas
     yield True
-    
-    
+    flees = {}
+    for elfpath in orcpath:
+        flees[elfpath] = os.listdir(elfpath+name)
     RPSN.takeFilesOut(name)
-
+    RPSN.data["active"]=name
     for elfpath in orcpath:
         
         flies = os.listdir(elfpath)
-        print(flies)
-        fleas = os.listdir(elfpath+name)
         for fly in flies:
             if fly not in flys[elfpath]:
                 if fly[-2:]!=".Σ":
-                    assert flight[-5:]==".save"
-                    assert flight in fleas
+                    assert fly[-5:]==".save"
     yield True
 
 
