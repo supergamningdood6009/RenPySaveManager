@@ -111,21 +111,29 @@ def takeFilesOut(folder):
                 os.rename(elfpath+"persistent",elfpath+"persistent.Σ")
             os.rename(elfpath+folder+"\\"+fly,elfpath+fly)    
 
-def makeprof(name,persistent,top):
+def makeprof(name,persistent,top="Don't worry about it"):
+
+    ame = name()
+    ersistent = persistent()
     for elfpath in orcpath:
         try:
-            os.makedirs(elfpath+name.get())
+            os.makedirs(elfpath+ame)
         except Exception as e:
             print(e)
             tk.messagebox.showerror("something went wrong","Probalbly the name for your profile already exits or is an invalid file name")
             return()
-        if(persistent.get()):
-            pers = open(elfpath+name.get()+"/persistent","w")
+        if(ersistent):
+            pers = open(elfpath+ame+"/persistent","w")
             pers.close()
             
-    data['profiles'].append(name.get())
+    data['profiles'].append(ame)
     
-    top.destroy()
+    if __name__=="__main__":
+       top.destroy()
+
+def unmakeprof(name):
+    ame = name()
+    data["profiles"].pop(data["profiles"].index(ame))
 
 def addprof():
     top = tk.Toplevel()
@@ -146,9 +154,10 @@ def addprof():
     out = tk.Button(top, 
             text ="done",
             width=5,
-            command=partial(makeprof,name,pers,top),
+            command=partial(makeprof,lambda:name.get(),lambda:pers.get(),top),
             bg="#00ff99",
             activebackground="#ff004f")
+    
     persistent.place(x=60,y=15)
     ent.place(x=60,y=50)
     out.place(x=10,y=30)
@@ -209,8 +218,9 @@ proflies.place(x=137,y=30)
 
 # input("?")
 # a ="a: 1, b: 2"
+if __name__=="__main__":
+    root.mainloop()
 
-root.mainloop()
 storage = open(selfpath+"info.yummy","w")
 storage.write(f'pathdata: {data['pathdata']},\nprofiles: {data['profiles']},\nactive: {data['active']}')
 storage.close()

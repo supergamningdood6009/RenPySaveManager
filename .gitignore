@@ -1,3 +1,4 @@
 info.yummy
 path/
 output/
+.pytest_cache/
