@@ -23,6 +23,43 @@ def TstProf(name,per):
     assert RPSN.data["profiles"][-1] != name
     yield True
     
+def TstChange(name):
+    active = RPSN.data["active"]
+    flights = {}
+    for elfpath in orcpath:
+        flights[elfpath] = os.listdir(elfpath)
+    
+    RPSN.putFilesAway()
+    flys = {}
+    for elfpath in orcpath:
+
+        flies = os.listdir(elfpath)
+        flys[elfpath] = flies
+        fleas = os.listdir(elfpath+active)
+        
+        for flight in flights[elfpath]:
+            if flight not in flies:
+                if flight[-2:]!=".Σ":
+                    assert flight[-5:]==".save"
+                    assert flight in fleas
+    yield True
+    
+    
+    RPSN.takeFilesOut(name)
+
+    for elfpath in orcpath:
+        
+        flies = os.listdir(elfpath)
+        print(flies)
+        fleas = os.listdir(elfpath+name)
+        for fly in flies:
+            if fly not in flys[elfpath]:
+                if fly[-2:]!=".Σ":
+                    assert flight[-5:]==".save"
+                    assert flight in fleas
+    yield True
+
+
 def test_makeunmake_prof():
     profiler = TstProf("yay",False)
     next(profiler)
@@ -33,6 +70,36 @@ def test_makeunmake_persistent():
     next(profiler)
     next(profiler)
 
-# def test_changeprof():
-#     profiler = TstProf("yay",False)
-#     active
+
+def test_changeprof():
+    active = RPSN.data["active"]
+    profiler = TstProf("yay",False)
+    next(profiler)
+    changer = TstChange("yay") 
+    next(changer)
+
+    for elfpath in orcpath:    
+        pers = open(elfpath+"yay/πενισ.save","w")
+        pers.write("yayayyippee")
+        pers.close()
+
+    next(changer)
+    for elfpath in orcpath:
+        assert os.path.exists(elfpath+"πενισ.save")
+        erms = open(elfpath+"πενισ.save","r")
+        assert erms.read()=="yayayyippee"
+        erms.close()
+
+    rechanger = TstChange(active)
+    next(rechanger)
+    next(rechanger)
+    
+    for elfpath in orcpath:
+        assert os.path.exists(elfpath+"yay/πενισ.save")
+        erms = open(elfpath+"yay/πενισ.save","r")
+        assert erms.read()=="yayayyippee"
+        erms.close()
+        os.remove(elfpath+"yay/πενισ.save")
+
+    next(profiler)
+

@@ -83,8 +83,8 @@ def changeactive(activechanged):
 
     throbber.update()
     putFilesAway()
-    sleep(2)
     takeFilesOut(changeto)
+    sleep(2)
     throbber.destroy()
 
     data['active'] = changeto
