@@ -4,40 +4,37 @@ from tkinter import ttk
 from tkinter import simpledialog as tsd
 from functools import partial
 from time import sleep
-from PIL import Image
-import random
+from pathlib import Path
 
-selfpath = os.path.abspath("./")+"/"
-gnomepath = os.path.abspath("../")+"/"
+selfpath = Path().resolve()
+print(selfpath)
+print(os.path.exists("/root/renpysavemanager2/renpysavemanager/path/"))
 if("info.yummy" not in os.listdir(selfpath)):
     jank = open("info.yummy","w")
-    knaj = open(selfpath+"info.yum")
+    knaj = open(selfpath/"info.yum")
     jank.write(knaj.read())
     jank.close()
     knaj.close()
-    os.remove(selfpath+"info.yum")
+    os.remove(selfpath/"info.yum")
     print("check indent")
-    os.makedirs(gnomepath+"saves\\default")
+    os.makedirs(selfpath.parent/"saves"/"default")
 
-storage = open(selfpath+"info.yummy")
+storage = open(selfpath/"info.yummy")
 halfway = storage.read().split(",\n")
 data = dict(item.split(": ") for item in halfway)
 storage.close()
-
-erstring = "paste the path to your appdata copy of the saves for this game\nIt prolly looks like C:\\Users\\YOUR USER HERE\\AppData\\Roaming\\RenPy\\NAME OF RENPY GAME PLUS A BUNCH OF NUMBERS HERE"
+erstring = "paste the path to your appdata copy of the saves for this game\nIt prolly looks like ~/.renpy/NAME OF RENPY GAME PLUS A BUNCH OF NUMBERS HERE\nThis is much nicer than the windows version"
 while(data['pathdata']=="I don't know, that's scary"):
     pappdatath = tsd.askstring("Wheres appdata", erstring)
-    if pappdatath[-1] != "\\":
-        pappdatath = pappdatath+"\\"
     if(os.path.exists(pappdatath)):
-        data['pathdata'] = pappdatath
-        os.makedirs(pappdatath+"\\default")
+        data['pathdata'] = Path(pappdatath)
+        os.makedirs(data['pathdata']/"default")
 
     else:
-        erstring = "python says that directory doesn't exist\nIt prolly looks like C:\\Users\\YOUR USER HERE\\AppData\\Roaming\\RenPy\\NAME OF RENPY GAME PLUS A BUNCH OF NUMBERS HERE"
+        erstring = "python says that directory doesn't exist\nIt prolly looks like ~/.renpy/NAME OF RENPY GAME PLUS A BUNCH OF NUMBERS HERE"
 del erstring
-
-orcpath = [gnomepath+"saves\\",data['pathdata']]
+data['pathdata'] = Path(data['pathdata'])
+orcpath = [selfpath.parent/"saves",data['pathdata']]
 
 data["profiles"]=data['profiles'][1:-1].replace("'",'').split(", ")
 
@@ -137,7 +134,7 @@ def unmakeprof(name):
 
 def addprof():
     top = tk.Toplevel()
-    top.configure(bg="#000000",width=210,height=100)
+    top.configure(bg="#000000",width=300,height=100)
     pers = tk.BooleanVar(top)
     name = tk.StringVar(top)
     ent=tk.Entry(top,
@@ -157,17 +154,16 @@ def addprof():
             command=partial(makeprof,lambda:name.get(),lambda:pers.get(),top),
             bg="#00ff99",
             activebackground="#ff004f")
-    
-    persistent.place(x=60,y=15)
-    ent.place(x=60,y=50)
+    persistent.place(x=95,y=15)
+    ent.place(x=90,y=50)
     out.place(x=10,y=30)
 
 root = tk.Tk(screenName=None, baseName=None, className='Tk')
-root.configure(bg="#000000",width=250,height=250)
+root.configure(bg="#000000",width=280,height=250)
 
 add = tk.Button(root,
                 text ="add new profile",
-                width=16,
+                width=15,
                 height=1,
                 command=addprof,
                 bg= "#ff004f",
@@ -200,7 +196,7 @@ selectforeground=[("readonly","#000000")])
 activeprof = tk.StringVar(root)
 proflies = ttk.Combobox(root,values=data['profiles'],
             textvariable=activeprof,
-            width=14,
+            width=12,
             style="ad.TCombobox",
             postcommand=lambda: proflies.configure(values=data['profiles']),
             state="readonly")
@@ -210,17 +206,17 @@ proflies.current(data['profiles'].index(data['active']))
 change = tk.Button(root,
                    text="change active profile",
                    command= partial(changeactive,activeprof),
+                   width=15,
                    bg="#ff004f",
                    activebackground="#00ff99")
 
 change.place(x=10,y=15)
-proflies.place(x=137,y=30)
+proflies.place(x=160,y=30)
 
 # input("?")
 # a ="a: 1, b: 2"
-if __name__=="__main__":
-    root.mainloop()
 
-storage = open(selfpath+"info.yummy","w")
-storage.write(f'pathdata: {data['pathdata']},\nprofiles: {data['profiles']},\nactive: {data['active']}')
+root.mainloop()
+storage = open(selfpath/"info.yummy","w")
+storage.write(f"pathdata: {data['pathdata']},\nprofiles: {data['profiles']},\nactive: {data['active']}")
 storage.close()
