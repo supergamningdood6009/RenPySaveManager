@@ -7,17 +7,16 @@ from time import sleep
 from pathlib import Path
 
 selfpath = Path().resolve()
-print(selfpath)
-print(os.path.exists("/root/renpysavemanager2/renpysavemanager/path/"))
-if("info.yummy" not in os.listdir(selfpath)):
+
+if(selfpath/"info.yummy" not in (selfpath).iterdir()):
     jank = open("info.yummy","w")
     knaj = open(selfpath/"info.yum")
     jank.write(knaj.read())
     jank.close()
     knaj.close()
-    os.remove(selfpath/"info.yum")
+    (selfpath/"info.yum").unlink()
     print("check indent")
-    os.makedirs(selfpath.parent/"saves"/"default")
+    (selfpath.parent/"saves"/"default").mkdir()
 
 storage = open(selfpath/"info.yummy")
 halfway = storage.read().split(",\n")
@@ -44,7 +43,7 @@ def changeactive(activechanged):
     if(data['active']==changeto):
         return()
     throbber = tk.Toplevel()
-    throbber.configure(bg="#000000",width=250,height=80)
+    throbber.configure(bg="#000000",width=300,height=80)
     thext = tk.StringVar()
     thext.set("Moving files...\nDon't have a gif because python is mean :(")
     lapel = tk.Label(throbber,
@@ -89,24 +88,24 @@ def changeactive(activechanged):
 def putFilesAway():
     for elfpath in orcpath:
 
-        flies = os.listdir(elfpath)
+        flies = elfpath.iterdir()
         persist=False
         for fly in flies:
-            if fly[-5:]==".save":
-                os.rename(elfpath+fly,elfpath+data["active"]+"\\"+fly)
-            if fly [-2:]==".Σ":
+            if fly.suffix==".save":
+                (fly).rename(elfpath/data["active"]/fly.name)
+            if fly.suffix==".Σ":
                 persist=True
         if(persist):
-            os.rename(elfpath+"persistent",elfpath+data["active"]+"/"+"persistent")
-            os.rename(elfpath+"persistent.Σ",elfpath+"persistent")
+            (elfpath/"persistent").rename(elfpath/data["active"]/"persistent")
+            (elfpath/"persistent.Σ").rename(elfpath/"persistent")
 
 def takeFilesOut(folder):
     for elfpath in orcpath:
-        flies = os.listdir(elfpath+folder)
+        flies = (elfpath/folder).iterdir()
         for fly in flies:
-            if(fly=="persistent"):
-                os.rename(elfpath+"persistent",elfpath+"persistent.Σ")
-            os.rename(elfpath+folder+"\\"+fly,elfpath+fly)    
+            if(fly.name=="persistent"):
+                (elfpath/"persistent").rename(elfpath/"persistent.Σ")
+            (fly).rename(elfpath/fly.name)    
 
 def makeprof(name,persistent,top="Don't worry about it"):
 
@@ -114,13 +113,13 @@ def makeprof(name,persistent,top="Don't worry about it"):
     ersistent = persistent()
     for elfpath in orcpath:
         try:
-            os.makedirs(elfpath+ame)
+            Path(elfpath/ame).mkdir()
         except Exception as e:
             print(e)
             tk.messagebox.showerror("something went wrong","Probalbly the name for your profile already exits or is an invalid file name")
             return()
         if(ersistent):
-            pers = open(elfpath+ame+"/persistent","w")
+            pers = open(elfpath/ame/"persistent","w")
             pers.close()
             
     data['profiles'].append(ame)

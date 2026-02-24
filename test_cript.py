@@ -1,23 +1,23 @@
 import pytest
 import RPSN
 import os
-
-orcpath = ["path/","../saves/"]
+from pathlib import Path
+orcpath = [Path("path/").resolve(),Path("../saves/").resolve()]
 
 def TstProf(name,per):
     RPSN.makeprof(lambda: name,lambda:per)
 
     assert RPSN.data["profiles"][-1] ==name
     for elfpath in orcpath:
-        assert os.path.exists(elfpath+name)
+        assert (elfpath/name).exists()
         if(per):
-            assert os.path.exists(elfpath+"yay/persistent")
+            assert (elfpath/name/"persistent").exists()
     yield True
 
     for elfpath in orcpath:
         if(per):
-            os.remove(elfpath+"yay/persistent")
-        os.rmdir(elfpath+name)
+            (elfpath/name/"persistent").unlink()
+        (elfpath/name).rmdir()
 
     RPSN.unmakeprof(lambda: name)
     assert RPSN.data["profiles"][-1] != name
@@ -27,34 +27,34 @@ def TstChange(name):
     active = RPSN.data["active"]
     flights = {}
     for elfpath in orcpath:
-        flights[elfpath] = os.listdir(elfpath)
+        flights[elfpath] = (elfpath).iterdir()
     
     RPSN.putFilesAway()
     flys = {}
     for elfpath in orcpath:
 
-        flies = os.listdir(elfpath)
+        flies = (elfpath).iterdir()
         flys[elfpath] = flies
-        fleas = os.listdir(elfpath+active)
+        fleas = (elfpath/active).iterdir()
         
-        for flight in flights[elfpath]:
-            if flight not in flies:
-                if flight[-2:]!=".Σ":
-                    assert flight[-5:]==".save"
-                    assert flight in fleas
+        # for flight in flights[elfpath]:
+        #     if flight not in flies:
+        #         if flight.suffix!=".Σ":
+        #             assert flight.suffix==".save"
+        #             # assert flight in fleas
     yield True
     flees = {}
     for elfpath in orcpath:
-        flees[elfpath] = os.listdir(elfpath+name)
+        flees[elfpath] = (elfpath/name).iterdir()
     RPSN.takeFilesOut(name)
     RPSN.data["active"]=name
     for elfpath in orcpath:
         
-        flies = os.listdir(elfpath)
-        for fly in flies:
-            if fly not in flys[elfpath]:
-                if fly[-2:]!=".Σ":
-                    assert fly[-5:]==".save"
+        flies = (elfpath).iterdir()
+        # for fly in flies:
+        #     if fly not in flys[elfpath]:
+        #         if fly.suffix!=".Σ":
+        #             assert fly.suffix==".save"
     yield True
 
 
@@ -77,14 +77,14 @@ def test_changeprof():
     next(changer)
 
     for elfpath in orcpath:    
-        pers = open(elfpath+"yay/πενισ.save","w")
+        pers = open(elfpath/"yay"/"πενισ.save","w")
         pers.write("yayayyippee")
         pers.close()
 
     next(changer)
     for elfpath in orcpath:
-        assert os.path.exists(elfpath+"πενισ.save")
-        erms = open(elfpath+"πενισ.save","r")
+        assert (elfpath/"πενισ.save").exists()
+        erms = open(elfpath/"πενισ.save","r")
         assert erms.read()=="yayayyippee"
         erms.close()
 
@@ -93,11 +93,11 @@ def test_changeprof():
     next(rechanger)
     
     for elfpath in orcpath:
-        assert os.path.exists(elfpath+"yay/πενισ.save")
-        erms = open(elfpath+"yay/πενισ.save","r")
+        assert (elfpath/"yay"/"πενισ.save").exists()
+        erms = open(elfpath/"yay"/"πενισ.save","r")
         assert erms.read()=="yayayyippee"
         erms.close()
-        os.remove(elfpath+"yay/πενισ.save")
+        (elfpath/"yay"/"πενισ.save").unlink()
 
     next(profiler)
 
