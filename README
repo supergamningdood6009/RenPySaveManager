@@ -1,7 +1,7 @@
 A way to create "profiles" for a renpy game that have entirely different sets of saves (and optionally, different persistent data)
 
 Installation:
-1) Be using windows probably
+1) Be using windows, or linux if you like living on the edge.
 2) download RenPySaveManger.zip from the latest release
 3) find the folder that contains your favorite visual novel (or immersive roleplay & click novel, depending)
 4) extract renpysavemanager.zip into the game folder of that visual novel (the .exe should be in NAME OF GAME HERE/game/RenPySaveManager, if its not in game/ then it will do at best nothing)
